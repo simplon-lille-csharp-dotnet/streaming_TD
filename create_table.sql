@@ -31,3 +31,13 @@ CREATE TABLE favorite(
 	FOREIGN KEY(user_id) REFERENCES "user"(user_id),
 	FOREIGN KEY(movie_id) REFERENCES movie(movie_id)
 );
+
+CREATE TABLE perform(
+	movie_id serial,
+	actor_id serial,
+	"role" varchar(30),
+	is_lead_role bool,
+	PRIMARY KEY(movie_id,actor_id),
+	FOREIGN KEY(actor_id) REFERENCES actor(actor_id),
+	FOREIGN KEY(movie_id) REFERENCES movie(movie_id)
+);
