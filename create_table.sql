@@ -1,43 +1,55 @@
-CREATE TABLE "user"(
-	user_id int primary key,
-	email varchar(100),
-	"password" varchar(30)
+CREATE TABLE "SMG_User"(
+	SUS_USERID serial primary key,
+	SUS_EMAIL varchar(100) not null,
+	"SUS_PASSWORD" varchar(30) not null,
+    SUS_DATECREA date default CURRENT_DATE,
+    SUS_DATEMODIF date
 );
 
-CREATE TABLE movie(
-	movie_id int primary key,
-	title varchar(100),
-	duration INTERVAL,
-	release_year int
+CREATE TABLE SMG_Movie(
+	SMO_MOVIEID serial primary key,
+	SMO_TITLE varchar(100) not null,
+	SMO_DURATION INTERVAL not null,
+	SMO_RELEASEYEAR int not null,
+    SMO_DATECREA date,
+    SMO_DATEMODIF date
 );
 
-CREATE TABLE Actor(
-	actor_id serial primary key,
-	firstname varchar(30),
-	lastname varchar(30),
-	birthdate DATE
+CREATE TABLE SMG_Actor(
+	SAC_ACTORID serial primary key,
+	SAC_FIRSTNAME varchar(30) not null,
+	SAC_LASTNAME varchar(30) not null,
+	SAC_BIRTHDATE DATE not null,
+    SAC_DATECREA date default CURRENT_DATE,
+    SAC_DATEMODIF date
 );
 
-CREATE TABLE Director(
-	director_id serial primary key,
-	firstname varchar(30),
-	lastname varchar(30)
+CREATE TABLE SMG_Director(
+	SDI_DIRECTORID serial primary key,
+	SDI_FIRSTNAME varchar(30) not null,
+	SDI_LASTNAME varchar(30) not null,
+    SDI_DATECREA date default CURRENT_DATE,
+    SDI_DATEMODIF date
 );
 
-CREATE TABLE favorite(
-	movie_id serial,
-	user_id serial, 
-	PRIMARY KEY(movie_id,user_id),
-	FOREIGN KEY(user_id) REFERENCES "user"(user_id),
-	FOREIGN KEY(movie_id) REFERENCES movie(movie_id)
+CREATE TABLE SMG_Favorite(
+	SFA_MOVIEID serial,
+	SFA_USERID serial,
+    SFA_DATECREA date default CURRENT_DATE,
+    SFA_DATEMODIF date,
+	PRIMARY KEY(SFA_MOVIEID,SFA_USERID),
+	FOREIGN KEY(SUS_USERID) REFERENCES "SMG_User"(SUS_USERID),
+	FOREIGN KEY(MOVIEID) REFERENCES SMG_Movie(SMO_MOVIEID)
 );
 
-CREATE TABLE perform(
-	movie_id serial,
-	actor_id serial,
-	"role" varchar(30),
-	is_lead_role bool,
-	PRIMARY KEY(movie_id,actor_id),
-	FOREIGN KEY(actor_id) REFERENCES actor(actor_id),
-	FOREIGN KEY(movie_id) REFERENCES movie(movie_id)
+CREATE TABLE SMG_Perform(
+	SPE_MOVIEID serial,
+	SPE_ACTORID serial,
+	"SPE_ROLE" varchar(30),
+	SPE_ISLEADROLE bool,
+    SPE_DATECREA date default CURRENT_DATE,
+    SPE_DATEMODIF date,
+	PRIMARY KEY(SPE_MOVIEID,SPE_ACTORID),
+	FOREIGN KEY(SPE_ACTORID) REFERENCES SMG_Actor(SAC_ACTORID),
+	FOREIGN KEY(SPE_MOVIEID) REFERENCES SMG_Movie(SMO_MOVIEID)
 );
