@@ -23,3 +23,11 @@ CREATE TABLE Director(
 	firstname varchar(30),
 	lastname varchar(30)
 );
+
+CREATE TABLE favorite(
+	movie_id serial,
+	user_id serial, 
+	PRIMARY KEY(movie_id,user_id),
+	FOREIGN KEY(user_id) REFERENCES "user"(user_id),
+	FOREIGN KEY(movie_id) REFERENCES movie(movie_id)
+);
