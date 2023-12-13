@@ -6,6 +6,14 @@ CREATE TABLE "SMG_User"(
     SUS_DATEMODIF date
 );
 
+CREATE TABLE SMG_Director(
+	SDI_DIRECTORID serial primary key,
+	SDI_FIRSTNAME varchar(30) not null,
+	SDI_LASTNAME varchar(30) not null,
+    SDI_DATECREA date default CURRENT_DATE,
+    SDI_DATEMODIF date
+);
+
 CREATE TABLE SMG_Movie(
 	SMO_MOVIEID serial primary key,
 	SMO_TITLE varchar(100) not null,
@@ -23,14 +31,6 @@ CREATE TABLE SMG_Actor(
 	SAC_BIRTHDATE DATE not null,
     SAC_DATECREA date default CURRENT_DATE,
     SAC_DATEMODIF date
-);
-
-CREATE TABLE SMG_Director(
-	SDI_DIRECTORID serial primary key,
-	SDI_FIRSTNAME varchar(30) not null,
-	SDI_LASTNAME varchar(30) not null,
-    SDI_DATECREA date default CURRENT_DATE,
-    SDI_DATEMODIF date
 );
 
 CREATE TABLE SMG_Favorite(
