@@ -10,3 +10,10 @@ CREATE TABLE movie(
 	duration INTERVAL,
 	release_year int
 );
+
+CREATE TABLE Actor(
+	actor_id serial primary key,
+	firstname varchar(30),
+	lastname varchar(30),
+	birthdate DATE
+);
