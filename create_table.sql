@@ -17,3 +17,9 @@ CREATE TABLE Actor(
 	lastname varchar(30),
 	birthdate DATE
 );
+
+CREATE TABLE Director(
+	director_id serial primary key,
+	firstname varchar(30),
+	lastname varchar(30)
+);
