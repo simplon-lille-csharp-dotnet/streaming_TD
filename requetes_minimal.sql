@@ -1,0 +1,23 @@
+SELECT 
+    SMO_TITLE,
+    MO_RELEASEYEAR 
+FROM 
+    MG_MOVIE 
+ORDER BY 
+    MO_RELEASEYEAR 
+DESC;
+
+/***********************************************/
+SELECT 
+	SAC_LASTNAME,
+	SAC_FIRSTNAME,
+	EXTRACT(YEAR FROM AGE(NOW(), SAC_BIRTHDATE)) AS AGE 
+FROM 
+	SMG_ACTOR
+WHERE
+	EXTRACT(YEAR FROM AGE(NOW(), SAC_BIRTHDATE))>30
+ORDER BY
+	SAC_FIRSTNAME,
+	SAC_LASTNAME;
+
+/******************************************************/
