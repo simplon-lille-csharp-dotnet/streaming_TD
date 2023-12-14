@@ -47,7 +47,7 @@ CREATE TABLE SMG_Favorite(
 CREATE TABLE SMG_Perform(
 	SPE_MOVIEID serial,
 	SPE_ACTORID serial,
-	SPE_ROLE varchar(30),
+	SPE_ROLE varchar(100),
 	SPE_ISLEADROLE bool,
     SPE_DATECREA timestamp default LOCALTIMESTAMP,
     SPE_DATEMODIF timestamp,
