@@ -1,80 +1,212 @@
-# streaming_TD
 
-## Création de la base de donnée
+# Streaming_TD
+
+
+
+
+## Installation
+
+Pour commencer il faut installer POSTGRESQL au lien suivant:
+
+    https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+
+**Optionnel** 
+
+Vous pouvez télécharger pgAdmin 4 directement depuis l'installateur de postgresql c'est une interface graphique pour postgresql
+
+# Initialisation de la base
+
+## Depuis postgresql 
+
+Récuperez le fichier
+
+    create_db.sql
+
+Et copier le dans la console postgresql
+
+## Depuis pgadmin 
+
+Ouvrer le serveur puis faites clic droit sur **Database** puis entrez le nom de votre base de donnée et valider
+
+
+## Création des tables
+
+Récupèrer le fichier create_table.sql et lancer executé le dans les environnement respectifs
+
+### Syntaxe des tables
+
+Nom de table : 
+
+    Abréviation du nom de la base ici Streaming = SMG + underscore + Nom de la table
+    Exemple : SMG_ACTOR
+
+Nom des champs de table
+
+    Un suffixe composé de la première lettre du nom de la base 
+    + 2 premières lettres de la table exemple la table Actor donne SAC 
+    + underscore
+    + nom du champs
+    Ce qui donne par exemple SAC_FIRSTNAME
+
+### Requetes minimal 
+
+#### 1
+
+Les titres et dates de sortie des films du plus récent au plus ancien
+
 ```sql
-CREATE DATABASE "Streaming"
-    WITH
-    OWNER = postgres
-    ENCODING = 'UTF8'
-    LOCALE_PROVIDER = 'libc'
-    CONNECTION LIMIT = -1
-    IS_TEMPLATE = False;
+SELECT 
+    SMO_TITLE,
+    MO_RELEASEYEAR 
+FROM 
+    MG_MOVIE 
+ORDER BY 
+    MO_RELEASEYEAR 
+DESC;
 ```
 
-## Création des tables 
+#### 2
 
-###  Création de la table user
-```sql
-CREATE TABLE "user"(
-	user_id int primary key,
-	email varchar(100),
-	"password" varchar(30)
-);
-```
+les noms, prénoms et âges des acteurs/actrices de plus de 30 ans dans l'ordre alphabétique (prénom d'abord, puis nom)
 
-###  Création de la table Movie
 ```sql
-CREATE TABLE movie(
-	movie_id int primary key,
-	title varchar(100),
-	duration INTERVAL,
-	release_year int
-);
+SELECT 
+	SAC_LASTNAME,
+	SAC_FIRSTNAME,
+	EXTRACT(YEAR FROM AGE(NOW(), SAC_BIRTHDATE)) AS AGE 
+FROM 
+	SMG_ACTOR
+WHERE
+	EXTRACT(YEAR FROM AGE(NOW(), SAC_BIRTHDATE))>30
+ORDER BY
+	SAC_FIRSTNAME,
+	SAC_LASTNAME;
+
 ```
 
-###  Création de la table Actor
+#### 3 
+
+la liste des acteurs/actrices principaux pour un film donné
+
 ```sql
-CREATE TABLE Actor(
-	actor_id serial primary key,
-	firstname varchar(30),
-	lastname varchar(30),
-	birthdate DATE
-);
+SELECT
+	SAC_FIRSTNAME,
+	SAC_LASTNAME
+FROM 
+	SMG_ACTOR
+INNER JOIN 
+	SMG_PERFORM 
+ON 
+	SMG_ACTOR.SAC_ACTORID = SMG_PERFORM.SPE_ACTORID
+INNER JOIN 
+	SMG_MOVIE 
+ON 
+	SMG_PERFORM.SPE_MOVIEID = SMG_MOVIE.SMO_MOVIEID
+WHERE
+	SPE_ISLEADROLE IS TRUE
+AND
+	SMO_TITLE = 'Chantilly Lace';
 ```
 
-###  Création de la table Director
+**Attention** Il est possible en changeant le nom du film qu'il n'est aucun acteur principal du à la génération aléatoire de données
+
+#### 4 
+
+la liste des films pour un acteur/actrice donné
+
 ```sql
-CREATE TABLE Director(
-	director_id serial primary key,
-	firstname varchar(30),
-	lastname varchar(30)
-);
+SELECT
+	SMO_TITLE
+FROM 
+	SMG_MOVIE
+INNER JOIN 
+	SMG_PERFORM 
+ON 
+	SMG_MOVIE.SMO_MOVIEID = SMG_PERFORM.SPE_MOVIEID
+INNER JOIN 
+	SMG_ACTOR
+ON 
+	SMG_PERFORM.SPE_ACTORID = SMG_ACTOR.SAC_ACTORID
+WHERE
+	SAC_FIRSTNAME = 'Dame'
+AND
+	SAC_LASTNAME = 'O''Looney'
 ```
 
-### Création de la table Favorite
+**Attention** Il est possible en changeant le nom et prénom de l'acteur qu'il n'est aucun film du à la génération aléatoire de données
+
+#### 5 
+
+ajouter un film
+
 ```sql
-CREATE TABLE favorite(
-	movie_id serial,
-	user_id serial, 
-	PRIMARY KEY(movie_id,user_id),
-	FOREIGN KEY(user_id) REFERENCES "user"(user_id),
-	FOREIGN KEY(movie_id) REFERENCES movie(movie_id)
-);
+insert into 
+    SMG_Movie (SMO_TITLE, SMO_RELEASEYEAR, SMO_DURATION, SMO_DIRECTORID) 
+values 
+    ('WALLAH C MOI', 2023, '180 minutes', 418);
 ```
-### Création de la table Perform
+
+#### 6 
+
+ajouter un acteur/actrice
+
 ```sql
-CREATE TABLE perform(
-	movie_id serial,
-	actor_id serial,
-	"role" varchar(30),
-	is_lead_role bool,
-	PRIMARY KEY(movie_id,actor_id),
-	FOREIGN KEY(actor_id) REFERENCES actor(actor_id),
-	FOREIGN KEY(movie_id) REFERENCES movie(movie_id)
-);
+INSERT INTO 
+    SMG_Actor (SAC_FIRSTNAME, SAC_LASTNAME, SAC_BIRTHDATE) 
+values 
+    ('Théo', 'Duflos', '07/06/2001');
 ```
-### Modification table Movie pour ajout de clé primaire
+#### 7 
+
+modifier un film
+
 ```sql
-ALTER TABLE movie ADD COLUMN director_id serial;
-ALTER TABLE movie ADD FOREIGN KEY(director_id) REFERENCES director(director_id);
+UPDATE 
+	SMG_MOVIE
+SET
+	SMO_TITLE = 'KEBAB A 4 EUROS JE FONCE',
+	SMO_RELEASEYEAR = 2023
+WHERE 
+	SMO_MOVIEID = 20;
+```
+
+#### 8 
+
+supprimer un acteur/actrice
+
+```sql
+delete from 
+    smg_actor 
+where 
+    sac_actorid = 18;
+
+```
+
+#### 9 
+
+afficher les 3 derniers acteurs/actrices ajouté(e)s
+
+```sql
+insert into 
+    SMG_Actor (SAC_FIRSTNAME, SAC_LASTNAME, SAC_BIRTHDATE) 
+values 
+    ('Jean', 'Michel', '26/1/1950');
+insert into 
+    SMG_Actor (SAC_FIRSTNAME, SAC_LASTNAME, SAC_BIRTHDATE) 
+values 
+    ('Crapaud', 'Clui', '3/3/1994');
+insert into 
+    SMG_Actor (SAC_FIRSTNAME, SAC_LASTNAME, SAC_BIRTHDATE) 
+values 
+    ('Ilest', 'DANSLARIVER', '19/12/1961');
+select 
+    * 
+from 
+    smg_actor 
+order by 
+    sac_datecrea 
+desc 
+limit 3;
+
 ```
