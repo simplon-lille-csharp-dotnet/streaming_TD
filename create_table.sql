@@ -1,27 +1,27 @@
 CREATE TABLE SMG_User(
 	SUS_USERID serial primary key,
 	SUS_EMAIL varchar(100) not null,
-	SUS_PASSWORD varchar(30) not null,
-    SUS_DATECREA date default CURRENT_DATE,
-    SUS_DATEMODIF date
+	SUS_PASSWORD varchar(100) not null,
+    SUS_DATECREA timestamp default LOCALTIMESTAMP,
+    SUS_DATEMODIF timestamp
 );
 
 CREATE TABLE SMG_Director(
 	SDI_DIRECTORID serial primary key,
 	SDI_FIRSTNAME varchar(30) not null,
 	SDI_LASTNAME varchar(30) not null,
-    SDI_DATECREA date default CURRENT_DATE,
-    SDI_DATEMODIF date
+    SDI_DATECREA timestamp default LOCALTIMESTAMP,
+    SDI_DATEMODIF timestamp
 );
 
 CREATE TABLE SMG_Movie(
 	SMO_MOVIEID serial primary key,
-	SMO_TITLE varchar(100) not null,
+	SMO_TITLE varchar(500) not null,
 	SMO_DURATION INTERVAL not null,
 	SMO_RELEASEYEAR int not null,
-    SMO_DATECREA date default CURRENT_DATE,
-    SMO_DATEMODIF date,
-	SMO_DIRECTORID serial,
+    SMO_DIRECTORID serial,
+    SMO_DATECREA timestamp default LOCALTIMESTAMP,
+    SMO_DATEMODIF timestamp,
     FOREIGN KEY(SMO_DIRECTORID) REFERENCES SMG_Director(SDI_DIRECTORID)
 );
 
@@ -30,15 +30,15 @@ CREATE TABLE SMG_Actor(
 	SAC_FIRSTNAME varchar(30) not null,
 	SAC_LASTNAME varchar(30) not null,
 	SAC_BIRTHDATE DATE not null,
-    SAC_DATECREA date default CURRENT_DATE,
-    SAC_DATEMODIF date
+    SAC_DATECREA timestamp default LOCALTIMESTAMP,
+    SAC_DATEMODIF timestamp
 );
 
 CREATE TABLE SMG_Favorite(
 	SFA_MOVIEID serial,
 	SFA_USERID serial,
-    SFA_DATECREA date default CURRENT_DATE,
-    SFA_DATEMODIF date,
+    SFA_DATECREA timestamp default LOCALTIMESTAMP,
+    SFA_DATEMODIF timestamp,
 	PRIMARY KEY(SFA_MOVIEID,SFA_USERID),
 	FOREIGN KEY(SFA_USERID) REFERENCES SMG_User(SUS_USERID),
 	FOREIGN KEY(SFA_MOVIEID) REFERENCES SMG_Movie(SMO_MOVIEID)
@@ -49,8 +49,8 @@ CREATE TABLE SMG_Perform(
 	SPE_ACTORID serial,
 	SPE_ROLE varchar(30),
 	SPE_ISLEADROLE bool,
-    SPE_DATECREA date default CURRENT_DATE,
-    SPE_DATEMODIF date,
+    SPE_DATECREA timestamp default LOCALTIMESTAMP,
+    SPE_DATEMODIF timestamp,
 	PRIMARY KEY(SPE_MOVIEID,SPE_ACTORID),
 	FOREIGN KEY(SPE_ACTORID) REFERENCES SMG_Actor(SAC_ACTORID),
 	FOREIGN KEY(SPE_MOVIEID) REFERENCES SMG_Movie(SMO_MOVIEID)
