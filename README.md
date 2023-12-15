@@ -29,10 +29,22 @@ Et copier le dans la console postgresql
 
 Ouvrer le serveur puis faites clic droit sur **Database** puis entrez le nom de votre base de donnée et valider
 
+![plot](/img/create_db.png)
+
+![plot](/img/create_db2.png)
+
 
 ## Création des tables
 
-Récupèrer le fichier create_table.sql et lancer executé le dans les environnement respectifs
+Récupèrer le fichier create_table.sql et lancer executé le dans leurs environnement respectifs
+
+![plot](/img/run_query.png)
+
+![plot](/img/open_file.png)
+
+![plot](/img/execute.png)
+
+
 
 ### Syntaxe des tables
 
@@ -48,6 +60,14 @@ Nom des champs de table
     + underscore
     + nom du champs
     Ce qui donne par exemple SAC_FIRSTNAME
+
+### Insertion des données
+
+Pour insérer les données dans la base executer le fichier 
+
+    insertion.sql
+
+
 
 ### Requetes minimal 
 
