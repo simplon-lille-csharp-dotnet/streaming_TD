@@ -160,3 +160,22 @@ HAVING
 								) 
 						);
 /*************************************************************/
+
+DO $$
+    DECLARE
+        movieInsertedCount int;
+BEGIN
+    INSERT INTO SMG_MOVIE (smo_title, smo_duration, smo_releaseyear, smo_directorid)
+    VALUES ('Rambo XIIII', '159 minutes', 2025, 65);
+
+    INSERT INTO SMG_FAVORITE (sfa_userid,sfa_movieid) 
+    VALUES (1,lastVal());
+
+    select COUNT(*) INTO movieInsertedCount from SMG_FAVORITE where sfa_movieid =lastVal();
+
+    IF movieInsertedCount = 0 THEN
+        ROLLBACK;
+    ELSE
+        COMMIT;
+    END IF;
+END$$;
