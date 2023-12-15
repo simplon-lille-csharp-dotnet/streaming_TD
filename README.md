@@ -230,3 +230,88 @@ desc
 limit 3;
 
 ```
+
+#### 10 (Bonus)
+
+La moyenne du nombre de films des acteurs/trices de plus de 50
+
+```sql
+SELECT
+	avg(cnt)
+	
+FROM (
+	SELECT 
+		SAC_ACTORID,
+		COUNT(SMO_MOVIEID) as cnt
+	FROM
+		SMG_MOVIE
+	INNER JOIN 
+		SMG_PERFORM
+	ON
+		SMG_MOVIE.SMO_MOVIEID = SMG_PERFORM.SPE_MOVIEID
+	INNER JOIN 
+		SMG_ACTOR
+	ON
+		SMG_PERFORM.SPE_ACTORID = SMG_ACTOR.SAC_ACTORID
+	WHERE
+		EXTRACT(YEAR FROM AGE(NOW(), SAC_BIRTHDATE))>50
+	GROUP BY
+		SAC_ACTORID
+);
+```
+
+#### 11 (Bonus)
+
+Le réalisateur ayant le plus de film mis en favoris et combien de ses films ont été mis en favoris.
+
+```sql
+SELECT
+    SMO_DIRECTORID,
+    MAX(number_director) AS max_number_director
+FROM (
+    SELECT 
+        SMO_DIRECTORID,
+        COUNT(SMO_DIRECTORID) as number_director
+    FROM
+        SMG_MOVIE
+    INNER JOIN
+        SMG_FAVORITE ON SMG_MOVIE.SMO_MOVIEID = SMG_FAVORITE.SFA_MOVIEID
+    GROUP BY 
+        SMO_DIRECTORID
+) AS director_counts
+GROUP BY
+    SMO_DIRECTORID
+ORDER BY
+    max_number_director DESC
+limit 1;
+```
+
+#### 12 (Bonus)
+
+Les films qui ont plus d'acteurs que la moyenne des acteurs par film.
+
+```sql
+SELECT
+	SMO_TITLE,
+	COUNT(SPE_ACTORID) AS NOMBRE_ACTEUR
+FROM
+	SMG_MOVIE
+INNER JOIN 
+	SMG_PERFORM
+ON
+	SMG_MOVIE.SMO_MOVIEID = SMG_PERFORM.SPE_MOVIEID
+GROUP BY 
+	SMO_TITLE
+HAVING
+	COUNT(SPE_ACTORID) > (SELECT 
+								AVG(cnt)
+							FROM (
+								SELECT 
+									COUNT(SPE_ACTORID) as cnt
+								FROM
+									SMG_PERFORM
+								group by 
+									spe_movieid
+								) 
+						);
+```
