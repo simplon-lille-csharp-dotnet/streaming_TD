@@ -11,21 +11,18 @@ Pour commencer il faut installer POSTGRESQL au lien suivant:
     https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 
 
-**Optionnel** 
+**obligatoire** 
 
-Vous pouvez télécharger pgAdmin 4 directement depuis l'installateur de postgresql c'est une interface graphique pour postgresql
+Vous devez télécharger pgAdmin 4 directement depuis l'installateur de postgresql c'est une interface graphique pour postgresql
+
+**Attention**
+
+Mettre la langue francaise à l'installation sinon il peut avoir des erreurs dans les input de date
 
 # Initialisation de la base
 
-## Depuis postgresql 
 
-Récuperez le fichier
-
-    create_db.sql
-
-Et copier le dans la console postgresql
-
-## Depuis pgadmin 
+## pgadmin 
 
 Ouvrer le serveur puis faites clic droit sur **Database** puis entrez le nom de votre base de donnée et valider
 
@@ -78,11 +75,11 @@ Les titres et dates de sortie des films du plus récent au plus ancien
 ```sql
 SELECT 
     SMO_TITLE,
-    MO_RELEASEYEAR 
+    SMO_RELEASEYEAR 
 FROM 
-    MG_MOVIE 
+    SMG_MOVIE 
 ORDER BY 
-    MO_RELEASEYEAR 
+    SMO_RELEASEYEAR 
 DESC;
 ```
 
@@ -317,6 +314,9 @@ HAVING
 ```
 
 #### 13 (bonus)
+
+Écrivez un script de transaction qui ajoute un nouveau film, puis l'ajoute aux films favoris d'un utilisateur spécifique, en s'assurant que les deux opérations réussissent ou échouent ensemble. (Astuce : Utilisez BEGIN TRANSACTION, COMMIT, et ROLLBACK)
+
 ```sql
 DO $$
     DECLARE
